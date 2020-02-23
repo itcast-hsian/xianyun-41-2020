@@ -2,23 +2,25 @@
     <div style="margin: 100px auto; width:300px;">
         <!-- 底层的div -->
         <div class="main">
-            <div class="bottom" ref="bottom">
-                <span 
-                class="iconfont iconhuangguan" 
-                v-for="item in 5" 
-                :key="item">
-                </span>
-            </div>
-
-            <!-- up-wrap控制宽度,超出部分就隐藏 -->
-            <div class="up-wrap" :style="`width:${upWidth}px;`">
-                <!-- 永远都是展示出5颗星星 -->
-                <div class="up" ref="up">
+            <div class="content" ref="content" @click="handleClick">
+                <div class="bottom" ref="bottom">
                     <span 
                     class="iconfont iconhuangguan" 
                     v-for="item in 5" 
                     :key="item">
                     </span>
+                </div>
+
+                <!-- up-wrap控制宽度,超出部分就隐藏 -->
+                <div class="up-wrap" :style="`width:${upWidth}px;`">
+                    <!-- 永远都是展示出5颗星星 -->
+                    <div class="up" ref="up">
+                        <span 
+                        class="iconfont iconhuangguan" 
+                        v-for="item in 5" 
+                        :key="item">
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -37,10 +39,18 @@ export default {
     mounted() {
         // 5颗星星的宽度
         this.width = this.$refs.bottom.offsetWidth;
+        // 给content赋值宽度
+        this.$refs.content.style.width = this.width + 'px';
+    },
 
-        // 假设接口返回了3.5分
-        this.upWidth = (3.5 / 5) * this.width;
-        
+    methods: {
+        handleClick(e){
+            // e.offsetX鼠标点击的位置
+            this.upWidth = e.offsetX; 
+
+            // 当前的评分
+            const score = e.offsetX / this.width * 5;
+        }
     }
 };
 </script>
@@ -50,6 +60,13 @@ export default {
     position: relative;
     height: 300px;
 }
+
+.content{
+    position: absolute;
+    left:0; top:0;
+    height:20px;
+}
+
 .bottom {
     position: absolute;
     left: 0;
